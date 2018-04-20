@@ -1,0 +1,2 @@
+ps -ef | grep python3 | awk -v N=2 '{print $N}' | xargs kill -9
+ps -ef | grep python3

@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+import sys
+import time
+import pexpect
+
+def relax(p, timeout):
+    try:
+        while p.isalive():
+            p.read_nonblocking(100, timeout=timeout)
+    except pexpect.exceptions.TIMEOUT:
+        pass
+
+
+_id = int(sys.argv[1])
+
+p = pexpect.spawnu("bash")
+p.logfile = sys.stdout
+p.expect_exact("$ ")
+
+p.sendline("cd /home/aran/text-world/evennia")
+p.expect_exact("$ ")
+
+p.sendline("git rev-parse --abbrev-ref HEAD")
+p.readline()
+branch = p.readline()[:-2]
+assert branch == "fantasy"
+
+p.expect_exact("$ ")
+
+p.sendline("./start_single.sh "+str(_id))
+p.expect_exact("Username: ")
+p.sendline("root")
+p.expect_exact("Email address: ")
+p.sendline("root@root.com")
+p.expect_exact("Password: ")
+p.sendline("root")
+p.expect_exact("Password (again): ")
+p.sendline("root")
+relax(p, 1)
+
+p = pexpect.spawnu("rlwrap", ["telnet", "localhost", str(4000+_id)])
+p.logfile = sys.stdout
+relax(p, 1)
+p.sendline("connect root root")
+relax(p, 1)
+if branch == "master":
+    p.sendline("@batchcommand text_sims.build")
+else:
+    p.sendline("@batchcommand tutorial_world.build")
+relax(p, 1)
+p.logfile = None
+p.sendline("@quell")
+#p.interact()

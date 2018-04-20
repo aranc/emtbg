@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+import socket
+import select
+import sys
+
+serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serversocket.bind(("localhost", int(sys.argv[1])))
+serversocket.listen(1)
+clientsocket, address = serversocket.accept()
+telnetsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+telnetsocket.connect(("localhost", 4001))
+
+while True:
+    r, w, e = select.select((clientsocket,telnetsocket),(),())
+    if clientsocket in r:
+        data = clientsocket.recv(1024)
+        if data:
+            print(data)
+            telnetsocket.send(data)
+        else:
+            clientsocket.close()
+            serversocket.close()
+            telnetsocket.close()
+            sys.exit()
+    if telnetsocket in r:
+        data = telnetsocket.recv(1024)
+        if data:
+            print("******************************************")
+            print(data)
+            print("******************************************")
+            clientsocket.send(data)
+        else:
+            clientsocket.close()
+            serversocket.close()
+            telnetsocket.close()
+            sys.exit()
