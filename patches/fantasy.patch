@@ -1,0 +1,336 @@
+diff --git a/evennia/contrib/tutorial_world/build.ev b/evennia/contrib/tutorial_world/build.ev
+index db1b2ad..fd234d2 100644
+--- a/evennia/contrib/tutorial_world/build.ev
++++ b/evennia/contrib/tutorial_world/build.ev
+@@ -831,89 +831,89 @@ archway
+ #
+ @set obelisk/puzzle_descs = ("You can briefly make out the image of {ba woman with a blue bird{n.", "You for a moment see the visage of {ba woman on a horse{n.", "For the briefest moment you make out an engraving of {ba regal woman wearing a crown{n.", "You think you can see the outline of {ba flaming shield{n in the stone.", "The surface for a moment seems to portray {ba sharp-faced woman with white hair{n.")
+ 
+-# Create the mobile. This is its start location.
+-@create/drop Ghostly apparition;ghost;apparition;fog : tutorial_world.mob.Mob
+-#
+-# Set its home to this location
+-#
+-@home ghost = tut#11
+-#
+-@lock ghost = get:false()
+-#
+-@set ghost/get_err_msg = Your fingers just pass straight through it!
+-#
+-@set ghost/desc_alive =
+- This ghostly shape could momentarily be mistaken for a thick fog had
+- it not moved with such determination and giving echoing hollow
+- screams as it did. The shape is hard to determine, now and then it
+- seems to form limbs and even faces that fade away only moments
+- later. The thing reeks of almost tangible spite at your
+- presence. This must be the ruin's eternal guardian.
+-#
+-@set ghost/desc_dead =
+- The ghostly apparition is nothing but a howling on the wind, an eternal
+- cold spot that can never be fully eradicated from these walls. While harmless
+- in this state, there is no doubt that it shall eventually return to this plane
+- to continue its endless haunting.
+-#
+-# We set the ghost to send defeated enemies to the Dark Cell
+-#
+-@set ghost/send_defeated_to = tut#08
+-#
+-@set ghost/defeat_msg =
+- You fall to the ground, defeated. As you do, the ghostly apparition dives
+- forward and engulf you.
+-
+-
+- The world turns black.
+-#
+-@set ghost/defeat_msg_room =
+- %s falls to the ground, defeated. For a moment their fallen form is
+- engulfed by the swirling mists of the ghostly apparition. When they
+- raise lift, the ground is empty!
+-#
+-@set ghost/weapon_ineffective_msg =
+- Your weapon just passes through the swirling mist of the ghostly apparition, causing no effect!
+-#
+-@set ghost/hit_msg =
+- The ghostly apparition howls and writhes, shifts and shivers.
+-#
+-@set ghost/death_msg =
+- After the last strike, the ghostly apparition seems to collapse
+-inwards. It fades and becomes one with the mist. Its howls rise to a
+-ear-shattering crescendo before quickly fading away to be nothing more
+-than the lonely cries of the cold, salty wind.
+-#
+-# Give the enemy some random echoes (echoed at irregular intervals)
+-#
+-@set ghost/irregular_msgs =
+- ["The foggy thing gives off a high-pitched shriek.",
+-  "For a moment the fog wraps around a nearby pillar.",
+-  "The fog drifts lower to the ground as if looking for something.",
+-  "The fog momentarily takes on a reddish hue.",
+-  "The fog temporarily fills most of the area as it changes shape.",
+-  "You accidentally breathes in some of the fog - you start coughing from the cold moisture."]
+-#
+-
+-# give the enemy a tentacle weapon
+-#
+-@create foggy tentacles;tentacles:tutorial_world.objects.Weapon
+-#
+-# Make the enemy's weapon good - hits at 70% of attacks, but not good at parrying.
+-#
+-@set foggy tentacles/hit = 0.7
+-#
+-@set foggy tentacles/parry = 0.1
+-#
+-@set foggy tentacles/damage = 5
+-#
+-# Actually give the enemy its weapon
+-#
+-@teleport/quiet tentacles = ghost
+-#
+-# Start the mob
+-#
+-mobon ghost
++#DISABLED## Create the mobile. This is its start location.
++#DISABLED#@create/drop Ghostly apparition;ghost;apparition;fog : tutorial_world.mob.Mob
++#DISABLED##
++#DISABLED## Set its home to this location
++#DISABLED##
++#DISABLED#@home ghost = tut#11
++#DISABLED##
++#DISABLED#@lock ghost = get:false()
++#DISABLED##
++#DISABLED#@set ghost/get_err_msg = Your fingers just pass straight through it!
++#DISABLED##
++#DISABLED#@set ghost/desc_alive =
++#DISABLED# This ghostly shape could momentarily be mistaken for a thick fog had
++#DISABLED# it not moved with such determination and giving echoing hollow
++#DISABLED# screams as it did. The shape is hard to determine, now and then it
++#DISABLED# seems to form limbs and even faces that fade away only moments
++#DISABLED# later. The thing reeks of almost tangible spite at your
++#DISABLED# presence. This must be the ruin's eternal guardian.
++#DISABLED##
++#DISABLED#@set ghost/desc_dead =
++#DISABLED# The ghostly apparition is nothing but a howling on the wind, an eternal
++#DISABLED# cold spot that can never be fully eradicated from these walls. While harmless
++#DISABLED# in this state, there is no doubt that it shall eventually return to this plane
++#DISABLED# to continue its endless haunting.
++#DISABLED##
++#DISABLED## We set the ghost to send defeated enemies to the Dark Cell
++#DISABLED##
++#DISABLED#@set ghost/send_defeated_to = tut#08
++#DISABLED##
++#DISABLED#@set ghost/defeat_msg =
++#DISABLED# You fall to the ground, defeated. As you do, the ghostly apparition dives
++#DISABLED# forward and engulf you.
++#DISABLED#
++#DISABLED#
++#DISABLED# The world turns black.
++#DISABLED##
++#DISABLED#@set ghost/defeat_msg_room =
++#DISABLED# %s falls to the ground, defeated. For a moment their fallen form is
++#DISABLED# engulfed by the swirling mists of the ghostly apparition. When they
++#DISABLED# raise lift, the ground is empty!
++#DISABLED##
++#DISABLED#@set ghost/weapon_ineffective_msg =
++#DISABLED# Your weapon just passes through the swirling mist of the ghostly apparition, causing no effect!
++#DISABLED##
++#DISABLED#@set ghost/hit_msg =
++#DISABLED# The ghostly apparition howls and writhes, shifts and shivers.
++#DISABLED##
++#DISABLED#@set ghost/death_msg =
++#DISABLED# After the last strike, the ghostly apparition seems to collapse
++#DISABLED#inwards. It fades and becomes one with the mist. Its howls rise to a
++#DISABLED#ear-shattering crescendo before quickly fading away to be nothing more
++#DISABLED#than the lonely cries of the cold, salty wind.
++#DISABLED##
++#DISABLED## Give the enemy some random echoes (echoed at irregular intervals)
++#DISABLED##
++#DISABLED#@set ghost/irregular_msgs =
++#DISABLED# ["The foggy thing gives off a high-pitched shriek.",
++#DISABLED#  "For a moment the fog wraps around a nearby pillar.",
++#DISABLED#  "The fog drifts lower to the ground as if looking for something.",
++#DISABLED#  "The fog momentarily takes on a reddish hue.",
++#DISABLED#  "The fog temporarily fills most of the area as it changes shape.",
++#DISABLED#  "You accidentally breathes in some of the fog - you start coughing from the cold moisture."]
++#DISABLED##
++#DISABLED#
++#DISABLED## give the enemy a tentacle weapon
++#DISABLED##
++#DISABLED#@create foggy tentacles;tentacles:tutorial_world.objects.Weapon
++#DISABLED##
++#DISABLED## Make the enemy's weapon good - hits at 70% of attacks, but not good at parrying.
++#DISABLED##
++#DISABLED#@set foggy tentacles/hit = 0.7
++#DISABLED##
++#DISABLED#@set foggy tentacles/parry = 0.1
++#DISABLED##
++#DISABLED#@set foggy tentacles/damage = 5
++#DISABLED##
++#DISABLED## Actually give the enemy its weapon
++#DISABLED##
++#DISABLED#@teleport/quiet tentacles = ghost
++#DISABLED##
++#DISABLED## Start the mob
++#DISABLED##
++#DISABLED#mobon ghost
+ 
+ #------------------------------------------------------------
+ #
+@@ -1004,6 +1004,8 @@ mobon ghost
+ stairs down
+ #
+ @desc
++ [REWARD_antechamber: 8]
++ <EOM>
+  This chamber lies almost directly under the main altar of the
+  temple. The passage of aeons is felt here and you also sense you are
+  close to great power.
+diff --git a/evennia/contrib/tutorial_world/objects.py b/evennia/contrib/tutorial_world/objects.py
+index 5df290a..6cf593e 100644
+--- a/evennia/contrib/tutorial_world/objects.py
++++ b/evennia/contrib/tutorial_world/objects.py
+@@ -232,9 +232,14 @@ class Obelisk(TutorialObject):
+         """
+         # randomly get the index for one of the descriptions
+         descs = self.db.puzzle_descs
+-        clueindex = random.randint(0, len(descs) - 1)
++        #Aran: randomize puzzle only once per episode
++        if caller.db.puzzle_clue is None:
++            clueindex = random.randint(0, len(descs) - 1)
++        else:
++            clueindex = caller.db.puzzle_clue
++
+         # set this description, with the random extra
+-        string = "The surface of the obelisk seem to waver, shift and writhe under your gaze, with " \
++        string = "[REWARD_obelisk: 7]\n<EOM>\n The surface of the obelisk seem to waver, shift and writhe under your gaze, with " \
+                  "different scenes and structures appearing whenever you look at it. "
+         self.db.desc = string + descs[clueindex]
+         # remember that this was the clue we got. The Puzzle room will
+@@ -1063,4 +1068,5 @@ class WeaponRack(TutorialObject):
+             wpn = spawn(WEAPON_PROTOTYPES[prototype], prototype_parents=WEAPON_PROTOTYPES)[0]
+             caller.tags.add(rack_id, category="tutorial_world")
+             wpn.location = caller
+-            caller.msg(self.db.get_weapon_msg % wpn.key + "[REWARD_weapon = 5]")
++            #caller.msg(self.db.get_weapon_msg % wpn.key + "[REWARD_weapon = 5]")
++            caller.msg(self.db.get_weapon_msg % wpn.key) #aran: removed unused reward
+diff --git a/evennia/contrib/tutorial_world/rooms.py b/evennia/contrib/tutorial_world/rooms.py
+index 43a4651..e8ae5e6 100644
+--- a/evennia/contrib/tutorial_world/rooms.py
++++ b/evennia/contrib/tutorial_world/rooms.py
+@@ -32,6 +32,20 @@ _SEARCH_AT_RESULT = utils.object_from_module(settings.SEARCH_AT_RESULT)
+ #
+ #------------------------------------------------------------
+ 
++#Aran: command to reset the obelisk puzzle
++class CmdResetPuzzle(Command):
++    key = "@resetpuzzle"
++    locks = "cmd:all()"
++    help_category = "TutorialWorld"
++
++    def func(self):
++        caller = self.caller
++        #caller.msg("before: " + str(caller.db.puzzle_clue))
++        caller.db.puzzle_clue = None
++        #caller.msg("after: " + str(caller.db.puzzle_clue))
++        self.caller.tags.remove("tutorial_climbed_tree", category="tutorial_world")
++
++
+ #
+ # Special command available in all tutorial rooms
+ #
+@@ -201,6 +215,7 @@ class TutorialRoomCmdSet(CmdSet):
+ 
+     def at_cmdset_creation(self):
+         "add the tutorial-room commands"
++        self.add(CmdResetPuzzle())
+         self.add(CmdTutorial())
+         self.add(CmdTutorialSetDetail())
+         self.add(CmdTutorialLook())
+@@ -537,7 +552,7 @@ class CmdLookBridge(Command):
+             # we fall 5% of time.
+             fall_exit = search_object(self.obj.db.fall_exit)
+             if fall_exit:
+-                self.caller.msg("{r%s{n\n[REWARD_fall : %f]" % (FALL_MESSAGE, -0.5))
++                #self.caller.msg("{r%s{n\n[REWARD_fall : %f]" % (FALL_MESSAGE, -0.5))
+                 self.caller.move_to(fall_exit[0], quiet=True)
+                 # inform others on the bridge
+                 self.obj.msg_contents("A plank gives way under %s's feet and " \
+@@ -568,6 +583,7 @@ class BridgeCmdSet(CmdSet):
+     priority = 1 # this gives it precedence over the normal look/help commands.
+     def at_cmdset_creation(self):
+         "Called at first cmdset creation"
++        self.add(CmdResetPuzzle())
+         self.add(CmdTutorial())
+         self.add(CmdEast())
+         self.add(CmdWest())
+@@ -782,11 +798,14 @@ class DarkCmdSet(CmdSet):
+ 
+     def at_cmdset_creation(self):
+         "populate the cmdset."
++        self.add(CmdResetPuzzle())
+         self.add(CmdTutorial())
+         self.add(CmdLookDark())
+         self.add(CmdDarkHelp())
+         self.add(CmdDarkNoMatch())
+         self.add(default_cmds.CmdSay)
++        self.add(default_cmds.CmdQuit)
++        self.add(default_cmds.CmdTeleport)
+ 
+ 
+ class DarkRoom(TutorialRoom):
+@@ -948,7 +967,7 @@ class TeleportRoom(TutorialRoom):
+         if is_success:
+             character.msg(self.db.success_teleport_msg+"\n[REWARD_success : 10]")
+         else:
+-            character.msg(self.db.failure_teleport_msg+"\n[REWARD_fail : 0]")
++            character.msg(self.db.failure_teleport_msg+"\n[REWARD_fail : -5")
+         # teleport quietly to the new place
+         character.move_to(results[0], quiet=True, move_hooks=False)
+ 
+diff --git a/evennia/server/evennia_launcher.py b/evennia/server/evennia_launcher.py
+index 907a214..d60dec1 100644
+--- a/evennia/server/evennia_launcher.py
++++ b/evennia/server/evennia_launcher.py
+@@ -59,7 +59,7 @@ TWISTED_MIN = '12.0'
+ DJANGO_MIN = '1.8'
+ DJANGO_REC = '1.8'
+ 
+-sys.path[1] = EVENNIA_ROOT
++sys.path.append(EVENNIA_ROOT)
+ 
+ #------------------------------------------------------------
+ #
+diff --git a/evennia/start_single.sh b/evennia/start_single.sh
+new file mode 100755
+index 0000000..299d7bd
+--- /dev/null
++++ b/evennia/start_single.sh
+@@ -0,0 +1,15 @@
++#USAGE: ./start.sh <num_of_parallel_game_servers>
++
++
++i=$1
++[ -e game$i ] && cd game$i && evennia stop && cd ..;
++rm -rvf game$i;
++evennia --init game$i;
++cd game$i;
++evennia migrate;
++echo "TELNET_PORTS = ["$((i + 4000))"]" >>server/conf/settings.py
++echo "AMP_PORT = "$((6000 + i)) >> server/conf/settings.py;
++echo "WEBSERVER_PORTS = [("$((8000+i))", "$((5100 + i))")]" >> server/conf/settings.py;
++echo "WEBSOCKET_CLIENT_PORT = "$((8100 + i)) >> server/conf/settings.py;
++evennia -i start;
++cd ..
+diff --git a/requirements.txt b/requirements.txt
+index 143ff78..35277b8 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,6 +1,6 @@
+ # Evennia dependencies, for Linux/Mac platforms
+ 
+-django >= 1.8, < 1.9
+-twisted >= 12.0
+-mock >= 1.0.1
++django == 1.8
++twisted == 12.0
++mock == 1.0.1
+ pillow

@@ -1,0 +1,27 @@
+diff --git a/evennia/server/evennia_launcher.py b/evennia/server/evennia_launcher.py
+index 907a214..d60dec1 100644
+--- a/evennia/server/evennia_launcher.py
++++ b/evennia/server/evennia_launcher.py
+@@ -59,7 +59,7 @@ TWISTED_MIN = '12.0'
+ DJANGO_MIN = '1.8'
+ DJANGO_REC = '1.8'
+ 
+-sys.path[1] = EVENNIA_ROOT
++sys.path.append(EVENNIA_ROOT)
+ 
+ #------------------------------------------------------------
+ #
+diff --git a/requirements.txt b/requirements.txt
+index 143ff78..35277b8 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,6 +1,6 @@
+ # Evennia dependencies, for Linux/Mac platforms
+ 
+-django >= 1.8, < 1.9
+-twisted >= 12.0
+-mock >= 1.0.1
++django == 1.8
++twisted == 12.0
++mock == 1.0.1
+ pillow
