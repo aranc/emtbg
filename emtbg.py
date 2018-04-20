@@ -320,7 +320,7 @@ def train(net, rank):
                     if np.mean(quest1_rewards) > .98:
                         epsilon = epsilon2
                         if rank == 0:
-                            notify("Epsilon is now:", epsilon)
+                            notify("Epsilon is now:", + str(epsilon))
 
 
         if terminal:
