@@ -369,7 +369,7 @@ def train(net, rank):
                 last_sync = time.time()
 
             if rank == 0:
-                stats.append({}]
+                stats.append({})
                 stats[-1]["episode_number"] = episode_number
                 stats[-1]["sum_rewards"] = sum_rewards
                 stats[-1]["num_steps"] = num_steps
