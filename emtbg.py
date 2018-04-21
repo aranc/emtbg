@@ -392,7 +392,7 @@ def train(net, rank):
                     if time.time() - last_save > save_every:
                         print("Saving..")
                         torch.save(net.state_dict(), name)
-                        with open(name_stats, "w") as _fh:
+                        with open(name_stats, "wb") as _fh:
                             pickle.dump(stats, _fh)
                         last_save = time.time()
 
