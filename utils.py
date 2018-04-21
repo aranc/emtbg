@@ -2,8 +2,9 @@ import pexpect
 import numpy as np
 
 def notify(msg):
-    if not b"laptop" in pexpect.run('hostname'):
-        pexpect.run('bash -c "~/arantgbot/tg_sendmsg.py [`hostname`] ' + msg + '"')
+    if os.path.exists(os.path.expanduser("~/arantgbot")): #Aran: This send notifications to my phone, it will not work for other people
+        if not b"laptop" in pexpect.run('hostname'):
+            pexpect.run('bash -c "~/arantgbot/tg_sendmsg.py [`hostname`] ' + msg + '"')
 
 
 def props(x, e):
