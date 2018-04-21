@@ -506,6 +506,7 @@ def main():
     global Net
     #global epsilon
     global n_cpu
+    global test_text
 
     port = 4001
     test_mode = False
