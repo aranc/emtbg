@@ -36,7 +36,8 @@ save_every = 60 * 10
 notify_every = 60 * 10
 #gamma = 0.5
 gamma = 0.9
-name="pb.pkl"
+name="weights.pkl"
+name_stats="stats.pkl"
 n_cpu = int(mp.cpu_count()) / 2
 n_cpu = 60
 #######################
@@ -250,6 +251,9 @@ def train(net, rank):
     quest3_rewards = np.zeros(100)
     quest4_rewards = np.zeros(100)
 
+    if rank == 0:
+        stats = []
+
     while True:
         if terminal:
             student_saw_obelisk = False
@@ -365,6 +369,21 @@ def train(net, rank):
                 last_sync = time.time()
 
             if rank == 0:
+                stats.append({}]
+                stats[-1]["episode_number"] = episode_number
+                stats[-1]["sum_rewards"] = sum_rewards
+                stats[-1]["num_steps"] = num_steps
+                stats[-1]["mean_recent_rewards_of_episodes"] = np.mean(recent_rewards_of_episodes)
+                stats[-1]["mean_recent_steps_of_episodes"] = np.mean(recent_steps_of_episodes)
+                stats[-1]["quest1_reward_cnt"] = quest1_reward_cnt
+                stats[-1]["quest2_reward_cnt"] = quest2_reward_cnt
+                stats[-1]["quest3_reward_cnt"] = quest3_reward_cnt
+                stats[-1]["quest4_reward_cnt"] = quest4_reward_cnt
+                stats[-1]["mean_quest1_rewards"] = np.mean(quest1_rewards)
+                stats[-1]["mean_quest2_rewards"] = np.mean(quest2_rewards)
+                stats[-1]["mean_quest3_rewards"] = np.mean(quest3_rewards)
+                stats[-1]["mean_quest4_rewards"] = np.mean(quest4_rewards)
+
                 summary = "{} {:.4} {} {:.4} {:.4} Qc: {} {} {} {} Q: {} {} {} {}".format(episode_number, sum_rewards, num_steps, np.mean(recent_rewards_of_episodes), np.mean(recent_steps_of_episodes), quest1_reward_cnt, quest2_reward_cnt, quest3_reward_cnt, quest4_reward_cnt, np.mean(quest1_rewards), np.mean(quest2_rewards), np.mean(quest3_rewards), np.mean(quest4_rewards))
                 print(summary)
 
@@ -373,6 +392,8 @@ def train(net, rank):
                     if time.time() - last_save > save_every:
                         print("Saving..")
                         torch.save(net.state_dict(), name)
+                        with open(name_stats, "w") as _fh:
+                            pickle.dump(stats, _fh)
                         last_save = time.time()
 
                 if notify_every is not None:
