@@ -1,5 +1,7 @@
 import pexpect
 import numpy as np
+import os
+import os.path
 
 def notify(msg):
     if os.path.exists(os.path.expanduser("~/arantgbot")): #Aran: This send notifications to my phone, it will not work for other people
