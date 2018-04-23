@@ -213,7 +213,7 @@ index 5df290a..6cf593e 100644
 +            #caller.msg(self.db.get_weapon_msg % wpn.key + "[REWARD_weapon = 5]")
 +            caller.msg(self.db.get_weapon_msg % wpn.key) #aran: removed unused reward
 diff --git a/evennia/contrib/tutorial_world/rooms.py b/evennia/contrib/tutorial_world/rooms.py
-index 43a4651..e8ae5e6 100644
+index 43a4651..ed2e378 100644
 --- a/evennia/contrib/tutorial_world/rooms.py
 +++ b/evennia/contrib/tutorial_world/rooms.py
 @@ -32,6 +32,20 @@ _SEARCH_AT_RESULT = utils.object_from_module(settings.SEARCH_AT_RESULT)
@@ -282,7 +282,7 @@ index 43a4651..e8ae5e6 100644
              character.msg(self.db.success_teleport_msg+"\n[REWARD_success : 10]")
          else:
 -            character.msg(self.db.failure_teleport_msg+"\n[REWARD_fail : 0]")
-+            character.msg(self.db.failure_teleport_msg+"\n[REWARD_fail : -5")
++            character.msg(self.db.failure_teleport_msg+"\n[REWARD_fail : 0")
          # teleport quietly to the new place
          character.move_to(results[0], quiet=True, move_hooks=False)
  
