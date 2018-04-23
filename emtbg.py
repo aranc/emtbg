@@ -23,6 +23,9 @@ from utils import props, notify
 import jingweiz
 
 ###### CONFIG #########
+max_episodes = 1000
+disable_curriculum = False
+
 target_q_ts = 60 * 5
 
 test_epsilon = 0
@@ -303,20 +306,23 @@ def train(net, rank):
         elif reward > 8 - 0.0001:
             quest3_reward_cnt = quest3_reward_cnt + 1
             quest3_rewards[episode_number % len(quest3_rewards)] = 1
-            if not student_saw_obelisk:
-                reward = -8
-                terminal = True
+            if not disable_curriculum:
+                if not student_saw_obelisk:
+                    reward = -8
+                    terminal = True
         elif reward > 7 - 0.0001:
             student_saw_obelisk = True
             quest2_reward_cnt = quest2_reward_cnt + 1
             quest2_rewards[episode_number % len(quest2_rewards)] = 1
-            if np.mean(quest2_rewards) < 0.75 and random.random() < 0.9:
-                terminal = True
+            if not disable_curriculum:
+                if np.mean(quest2_rewards) < 0.75 and random.random() < 0.9:
+                    terminal = True
         elif reward > 5 - 0.0001:
             quest1_reward_cnt = quest1_reward_cnt + 1
             quest1_rewards[episode_number % len(quest1_rewards)] = 1
-            if np.mean(quest1_rewards) < 0.9 and random.random() < 0.85:
-                terminal = True
+            if not disable_curriculum:
+                if np.mean(quest1_rewards) < 0.9 and random.random() < 0.85:
+                    terminal = True
 
         if 2 * epsilon > (epsilon1 + epsilon2):
             if np.mean(quest3_rewards) > .98:
@@ -401,6 +407,15 @@ def train(net, rank):
                         print("Notify..")
                         notify(summary)
                         last_notify = time.time()
+
+                if max_episodes is not None and episode_number == max_episodes:
+                    torch.save(net.state_dict(), name)
+                    with open(name_stats, "wb") as _fh:
+                        pickle.dump(stats, _fh)
+                    notify(summary)
+                    notify("Done.")
+                    print("Done.")
+                    sys.exit()
 
 
 def test(net, env, is_tutorial_world):
