@@ -1,6 +1,3 @@
-#Only using the 'go' action
-
-
 import pickle
 import random
 import numpy as np
