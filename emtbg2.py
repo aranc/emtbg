@@ -19,8 +19,8 @@ from utils import props, notify
 import jingweiz
 
 ###### CONFIG #########
-max_episodes = 1000
 max_episodes = None
+max_episodes = 1000
 
 target_q_ts = 60 * 5
 
