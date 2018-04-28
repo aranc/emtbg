@@ -513,6 +513,9 @@ def test(net, env, is_tutorial_world):
             else:
                 print(nepisodes, "avg steps:", total_steps / nepisodes, "avg reward:", total_reward / nepisodes, "Q1:", quest1_reward_cnt / nepisodes)
 
+            if nepisodes == max_episodes:
+                sys.exit()
+
 
 def main():
     global Net
