@@ -19,8 +19,8 @@ from utils import props, notify
 import jingweiz
 
 ###### CONFIG #########
+max_episodes = 10000
 max_episodes = None
-max_episodes = 1000
 
 target_q_ts = 60 * 5
 
@@ -28,7 +28,7 @@ test_epsilon = 0
 test_text = False
 
 learning_rate = 5e-4
-epsilon = 0.1
+Epsilon = 0.1
 epsilon_annealing = False
 epsilon_start = 1.0
 epsilon_end = 0.1
@@ -36,7 +36,7 @@ epsilon_length = 2000
 
 save_every = 60 * 10
 notify_every = 60 * 10
-save_every_episodes = 100
+save_every_episodes = 1000
 save_every_episodes = None
 #gamma = 0.5
 gamma = 0.9
@@ -139,8 +139,8 @@ class Tunnel():
 
         return self._pos2text(), reward, terminal, self._meta_info()
 
-        def apply_curriculum(self, episode_number):
-            pass
+    def apply_curriculum(self, episode_number):
+        pass
 
 
 class Tmaze():
@@ -280,6 +280,92 @@ class Tmaze():
         terminal = False
         reward = self.default_reward
         return self._pos2text(), reward, terminal, self._meta_info()
+
+
+class Tmaze_SDD():
+    win_reward = 1.0
+    loss_reward = -1.0
+    default_reward = 0.0
+
+    _words = None
+    _symbols_table = None
+
+    def __init__(self):
+        self.words()
+        self.text2indices("")
+
+    def reset(self):
+        self.desired_color = random.choice(("red", "green"))
+        self.upper_color = random.choice(("red", "green"))
+        self.lower_color = "red" if self.upper_color == "green" else "green"
+        assert self.lower_color != self.upper_color
+        assert self.lower_color in ("red", "green")
+        assert self.upper_color in ("red", "green")
+        self.pos = 0
+        return self._pos2text(), 0, False, self._meta_info()
+
+    def apply_curriculum(self, episode_number):
+        pass
+
+    def _meta_info(self):
+        if self.desired_color == self.upper_color:
+            compass = "upper"
+        else:
+            compass = "lower"
+        return "{} {} {}".format(self.pos, self.desired_color, compass)
+
+    def _pos2text(self):
+        if self.pos == 0:
+            return "You are at the begining of a maze, you see a " + self.desired_color + " statue"
+        if self.pos == 1:
+            return "You have reached the lower wing of the maze, you see a " + self.lower_color + " door"
+        if self.pos == 2:
+            return "You have reached the upper wing of the maze, you see a " + self.upper_color + " door"
+
+    def actions(self):
+        return "nextroom", "exit"
+
+    def words(self):
+        if self._words is None:
+            _words = ["red", "green", "statue", "door"]
+            _words += "You are at the begining of a maze, you see a ".replace(",", "").split()
+            _words += "You have reached the lower wing of the maze, you see a ".replace(",", "").split()
+            _words += "You have reached the upper wing of the maze, you see a ".replace(",", "").split()
+            _words += "You won".replace(",", "").split()
+            _words += "You failed".replace(",", "").split()
+            self._words = set(_words)
+        return self._words
+
+    def text2indices(self, text):
+        if self._symbols_table is None:
+            words = sorted(self.words())
+            words = enumerate(words)
+            table = {}
+            for idx, sym in words:
+                table[sym] = idx
+            self._symbols_table = table
+
+        text = text.replace(",", "").split()
+        text = [self._symbols_table[word] for word in text]
+        if len(text) < max_desc_size:
+            empty = len(self._words)
+            prefix = [empty] * (max_desc_size - len(text))
+            text = prefix + text
+        assert len(text) == max_desc_size
+        return text
+
+    def step(self, action):
+        if self.pos < 2 and action == 0:
+            self.pos = self.pos + 1
+            return self._pos2text(), self.default_reward, False, self._meta_info()
+
+        won = False
+        if action == 1 and self.pos > 0:
+            current_color = self.upper_color if self.pos == 2 else self.lower_color
+            won = current_color == self.desired_color
+        reward = self.win_reward if won else self.loss_reward
+        text = "You won" if won else "You failed"
+        return text, reward, True, self._meta_info()
 
 
 
@@ -468,6 +554,7 @@ def train(net, rank):
     target_net.reset()
 
     optimizer = optim.RMSprop(net.parameters(), lr=learning_rate)
+    epsilon = Epsilon
     last_save = time.time()
     last_notify = time.time()
     last_sync = time.time()
@@ -732,7 +819,7 @@ def manual(env):
 def main():
     global Net
     global Game
-    global epsilon
+    global Epsilon
     global n_cpu
     global test_text
     global gamma
@@ -753,8 +840,8 @@ def main():
                 test_mode = True
                 test_text = True
             elif c == 'e':
-                epsilon = float(sys.argv[2])
-                print("epsilon:", epsilon)
+                Epsilon = float(sys.argv[2])
+                print("epsilon:", Epsilon)
             elif c == 'd':
                 Net = Net_dnc
             elif c == 'l':
@@ -774,6 +861,10 @@ def main():
                 gamma = gamma_tmaze
                 max_steps = max_steps_tmaze
                 epsilon_annealing = True
+            elif c == 'S':
+                Game = Tmaze_SDD
+                gamma = gamma_tmaze
+                max_steps = max_steps_tmaze
 
     print("Using:", Net, Game)
 
