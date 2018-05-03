@@ -14,7 +14,7 @@ import time
 from operator import itemgetter
 import six
 assert six.PY3
-from lp import Game
+from env import Game
 from utils import props, notify
 
 ###### CONFIG #########
